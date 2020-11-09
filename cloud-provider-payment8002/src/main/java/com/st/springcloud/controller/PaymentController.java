@@ -15,13 +15,14 @@ import javax.annotation.Resource;
 public class PaymentController {
     @Resource
     private PaymentService paymentService;
+
     @Value("${server.port}")
     private String serverPort;
 
     @PostMapping(value = "/payment/create")
     public CommonResult create(@RequestBody Payment payment){
         int result=paymentService.create(payment);
-        log.info("PaymentController=>create，serverPort："+serverPort+"，插入结果："+result);
+        log.info("PaymentController=>create，serverPort："+serverPort+"，插入结果，："+result);
         if(result>0){
             return new CommonResult(200,"插入数据成功，serverPort："+serverPort,result);
         }
