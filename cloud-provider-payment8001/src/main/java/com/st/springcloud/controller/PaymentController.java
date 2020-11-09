@@ -1,0 +1,37 @@
+package com.st.springcloud.controller;
+
+import com.st.springcloud.entities.CommonResult;
+import com.st.springcloud.entities.Payment;
+import com.st.springcloud.service.PaymentService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+
+@RestController
+@Slf4j
+public class PaymentController {
+    @Resource
+    private PaymentService paymentService;
+
+    @PostMapping(value = "/payment/create")
+    public CommonResult create(@RequestBody Payment payment){
+        int result=paymentService.create(payment);
+        log.info("PaymentController=>create插入结果："+result);
+        if(result>0){
+            return new CommonResult(200,"插入数据成功",result);
+        }
+        return new CommonResult(444,"插入数据失败",result);
+    }
+
+    @GetMapping(value = "/payment/get/{id}")
+    public CommonResult getPaymentById(@PathVariable("id") Long id) {
+        Payment payment=paymentService.getPaymentById(id);
+        log.info("PaymentController=>getPaymentById，查询结果："+payment);
+        if(null!=payment){
+            return new CommonResult(200,"查询数据成功",payment);
+        }
+        return new CommonResult(444,"查询数据失败",null);
+    }
+}
